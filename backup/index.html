@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Comic+Neue&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"> <!-- your original styles -->
+  <title>1/2 Letter</title>
+</head>
+<body>
+
+  <!-- Countdown Timer -->
+  <div class="countdown" id="countdown">Loading timer...</div>
+
+  <div class="flowers-overlay" id="overlay">
+    <model-viewer
+      src="flowers.glb"
+      alt="3D model of a tulip bouquet"
+      auto-rotate
+      camera-controls
+      loading="lazy"
+    ></model-viewer>
+    <p class="overlay-text">“First come the flowers that glow upon your screen, next will be the ones that light up your nights.”</p>
+    <button class="close-model" id="closeModel">X</button>
+  </div>
+
+  <div class="wrapper">
+    <div class="lid one"></div>
+    <div class="lid two"></div>
+    <div class="envelope"></div>
+    <div class="letter">
+      <h3 class="letter-title">Dear Wissam,</h3>  
+      <p class="letter-content">
+        You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha.You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha. You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha.You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha. You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha.You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha. You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha.
+      </p>
+    </div>
+  </div>
+
+  <div class="button-container">
+    <button id="showModelBtn">3ABZI HNA!</button>
+    <button id="openBtn">Open</button>
+  </div>
+
+  <script>
+    const btn = document.getElementById('openBtn');
+    const wrapper = document.querySelector('.wrapper');
+    const letter = document.querySelector('.letter');
+    const showBtn = document.getElementById('showModelBtn');
+    const overlay = document.getElementById('overlay');
+    const closeBtn = document.getElementById('closeModel');
+    let isOpen = false;
+
+    btn.addEventListener('click', () => {
+      wrapper.classList.toggle('open');
+      isOpen = !isOpen;
+      btn.textContent = isOpen ? 'Close Letter' : 'Open Letter';
+      letter.style.top = isOpen ? '-80px' : '0px';
+      showBtn.style.display = isOpen ? 'block' : 'none';
+    });
+
+    showBtn.addEventListener('click', () => {
+      overlay.classList.add('active');
+    });
+
+    closeBtn.addEventListener('click', () => {
+      overlay.classList.remove('active');
+    });
+
+    // Countdown Timer Script
+    const countdownEl = document.getElementById('countdown');
+    const endDate = new Date("June 30, 2026 23:59:59").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = endDate - now;
+
+      if (distance <= 0) {
+        countdownEl.textContent = "🎉 Time's up! 🎉";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdownEl.innerHTML = `
+        ⏳ <b>${days}</b>d : <b>${hours}</b>h : <b>${minutes}</b>m : <b>${seconds}</b>s
+      `;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+</body>
+</html>

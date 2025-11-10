@@ -1,0 +1,357 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  background-color: #cdedf5; /* very light violet background */
+}
+
+/* Envelope container */
+.wrapper {
+  height: 360px;
+  width: 540px;
+  background-color: #b798e0; /* soft violet main */
+  position: relative;
+  display: flex;
+  justify-content: center;
+  z-index: 0;
+  transform: translateY(180px);
+}
+
+/* Lids */
+.lid {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  border-right: 270px solid transparent;
+  border-bottom: 180px solid transparent;
+  border-left: 270px solid transparent;
+  transform-origin: top;
+  transition: transform 0.3s ease;
+}
+
+.lid.one {
+  border-top: 180px solid #b798e0; /* lighter violet top */
+  transform: rotateX(0deg);
+  z-index: 3;
+}
+
+.lid.two {
+  border-top: 180px solid #d3b4f0; /* main violet tone */
+  transform: rotateX(90deg);
+  z-index: 1;
+}
+
+/* Envelope body */
+.envelope {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  border-top: 180px solid transparent;
+  border-right: 270px solid #d8b9f2; /* right side lilac */
+  border-bottom: 180px solid #d8b9f2;
+  border-left: 270px solid #c8a6f0; /* left side slightly darker lilac */
+  z-index: 3;
+}
+
+/* Letter inside */
+.letter {
+  font-family: 'Lucida Handwriting', 'Comic Sans MS', cursive;
+  position: absolute;
+  color: #010002; /* text color with violet undertone */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  top: 0px;
+  width: 80%;
+  height: 100%;
+  background-color: #f9f7fb; /* soft off-white lavender paper */
+  border-radius: 25px;
+  z-index: 2;
+  transition: 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.letter-title {
+  font-size: 16px;
+  margin-top: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #7a5fa6; /* deep pastel violet */
+  font-family: 'Brush Script MT', cursive;
+}
+
+.letter-content {
+  line-height: 1.6;
+  width: 95%;
+  text-align: justify;      
+  text-indent: 2em; 
+  font-family: 'Dancing Script', 'Comic Neue', cursive;
+  filter: blur(5px);
+  user-select: none; /* optional: prevent copying */
+}
+
+.letter p {
+  font-size: 18px;
+  margin-top: 5px;
+  color: #170f2c;
+}
+
+/* When open */
+.wrapper.open .lid.one {
+  transform: rotateX(90deg);
+  transition-delay: 0s;
+}
+
+.wrapper.open .lid.two {
+  transform: rotateX(180deg);
+  transition-delay: 0.25s;
+}
+
+.wrapper.open .letter {
+  transform: translateY(-90px);
+  transition-delay: 0.5s;
+}
+
+/* Button styling */
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 200px;
+}
+
+#openBtn {
+  background-color: #a17fe0;
+  color: white;
+  border: none;
+  padding: 14px 36px;
+  border-radius: 50px;
+  font-size: 18px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+}
+
+#showModelBtn {
+  position: relative;
+  background: transparent;
+  color: #8a63d2;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  overflow: hidden;
+  padding: 8px 20px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  display: none ;
+}
+
+#showModelBtn:hover {
+  color: #b99cff;
+}
+
+#showModelBtn::before,
+#showModelBtn::after {
+  position: absolute;
+  content: '';
+  display: block;
+  width: 140%;
+  height: 100%;
+  left: -20%;
+  z-index: -1;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+#showModelBtn::before {
+  top: -70%;
+  background-image:
+    radial-gradient(circle, #8a63d2 20%, transparent 20%),
+    radial-gradient(circle, transparent 20%, #8a63d2 20%, transparent 30%),
+    radial-gradient(circle, #8a63d2 20%, transparent 20%),
+    radial-gradient(circle, #8a63d2 20%, transparent 20%),
+    radial-gradient(circle, transparent 10%, #8a63d2 15%, transparent 20%),
+    radial-gradient(circle, #8a63d2 20%, transparent 20%),
+    radial-gradient(circle, #8a63d2 20%, transparent 20%),
+    radial-gradient(circle, #8a63d2 20%, transparent 20%),
+    radial-gradient(circle, #8a63d2 20%, transparent 20%);
+  background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%, 15% 15%, 10% 10%, 18% 18%;
+  animation: topBubbles 2.5s ease-in-out infinite;
+}
+
+#showModelBtn::after {
+  bottom: -70%;
+  background-image:
+    radial-gradient(circle, #8a63d2 20%, transparent 20%),
+    radial-gradient(circle, #8a63d2 20%, transparent 20%),
+    radial-gradient(circle, transparent 10%, #8a63d2 15%, transparent 20%),
+    radial-gradient(circle, #8a63d2 20%, transparent 20%),
+    radial-gradient(circle, #8a63d2 20%, transparent 20%),
+    radial-gradient(circle, #8a63d2 20%, transparent 20%),
+    radial-gradient(circle, #8a63d2 20%, transparent 20%);
+  background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 10% 10%, 20% 20%;
+  animation: bottomBubbles 2.5s ease-in-out infinite;
+}
+
+@keyframes topBubbles {
+  0% {
+    background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%, 40% 90%, 55% 90%, 70% 90%;
+  }
+  50% {
+    background-position: 0% 80%, 0% 20%, 10% 40%, 20% 0%, 30% 30%, 22% 50%, 50% 50%, 65% 20%, 90% 30%;
+  }
+  100% {
+    background-position: 0% 70%, 0% 10%, 10% 30%, 20% -10%, 30% 20%, 22% 40%, 50% 40%, 65% 10%, 90% 20%;
+    background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+  }
+}
+
+@keyframes bottomBubbles {
+  0% {
+    background-position: 10% -10%, 30% 10%, 55% -10%, 70% -10%, 85% -10%, 70% -10%, 70% 0%;
+  }
+  50% {
+    background-position: 0% 80%, 20% 80%, 45% 60%, 60% 100%, 75% 70%, 95% 60%, 105% 0%;
+  }
+  100% {
+    background-position: 0% 90%, 20% 90%, 45% 70%, 60% 110%, 75% 80%, 95% 70%, 110% 10%;
+    background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+  }
+}
+
+
+#openBtn:hover {
+  background-color: #b794f4;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+
+#openBtn:active {
+  transform: translateY(1px);
+}
+
+/* Overlay close button */
+.close-model {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #5b4a7a;
+  font-size: 24px;
+  font-weight: bold;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  user-select: none;
+  z-index: 10001;
+}
+
+.close-model:hover {
+  background-color: #d7c3f5;
+  color: #4b3c68;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.flowers-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(50, 30, 80, 0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(8px);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.overlay-text {
+  color: #f4f0fa;
+  font-size: 18px;
+  text-align: center;
+  max-width: 700px;
+  user-select: none;
+  margin: 0;
+}
+
+.flowers-overlay.active {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+body.blur-active > *:not(.flowers-overlay) {
+  pointer-events: none;
+  user-select: none;
+  filter: blur(6px);
+}
+
+.flowers-overlay model-viewer {
+  width: 80vw;
+  height: 80vh;
+  max-width: 900px;
+  max-height: 600px;
+  background-color: transparent;
+}
+
+/* ===== Countdown Timer Styles ===== */
+.countdown {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(138, 99, 210, 0.15);
+  border: 2px solid #8a63d2;
+  backdrop-filter: blur(8px);
+  color: #5a3fa4;
+  font-family: 'Dancing Script', cursive;
+  font-size: 22px;
+  letter-spacing: 1px;
+  padding: 12px 20px;
+  border-radius: 18px;
+  box-shadow: 0 0 10px rgba(138, 99, 210, 0.4);
+  text-align: center;
+  animation: glow 2s ease-in-out infinite alternate;
+  z-index: 9999;
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 8px rgba(138, 99, 210, 0.3); }
+  to { box-shadow: 0 0 20px rgba(138, 99, 210, 0.7); }
+}
+
+.overlay-text {
+  font-family: 'Playfair Display', 'Georgia', serif;
+}
