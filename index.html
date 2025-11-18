@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Comic+Neue&family=Playfair+Display&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Comic+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <title>1/2 Letter</title>
   <style>
     * {
@@ -24,6 +24,7 @@
       background-color: #cdedf5;
     }
 
+    /* --- Envelope Styles --- */
     .wrapper {
       height: 360px;
       width: 540px;
@@ -71,6 +72,7 @@
       border-bottom: 180px solid #d8b9f2;
       border-left: 270px solid #c8a6f0;
       z-index: 3;
+      pointer-events: none; /* Allows clicking through to the letter when open */
     }
 
     .letter {
@@ -89,6 +91,37 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
+      cursor: pointer; /* Indicates clickability */
+      animation: big 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 5px #b389e2, 0 0 10px #b389e2;
+  }
+  50% {
+    box-shadow: 0 0 20px #b389e2, 0 0 30px #b389e2; /* Intensity increases */
+  }
+  100% {
+    box-shadow: 0 0 5px #b389e2, 0 0 10px #b389e2;
+  }
+    }
+    @keyframes big {
+  0% { top: 0px;
+           }
+
+  25% { top: -1px;
+          }
+  50% { top: -4px;
+         }
+
+  75% { top: -1px;
+          }
+  100% { top: 0px;
+           }
+    }
+    .letter:hover {
+        animation: pulse-glow 2s infinite alternate;
     }
 
     .letter-title {
@@ -107,8 +140,9 @@
       text-align: justify;
       text-indent: 2em;
       font-family: 'Dancing Script', 'Comic Neue', cursive;
-      filter: blur(5px);
+      filter: blur(4px); /* Blurred in preview */
       user-select: none;
+      overflow: hidden;
     }
 
     .letter p {
@@ -132,6 +166,7 @@
       transition-delay: 0.5s;
     }
 
+    /* --- Buttons --- */
     .button-container {
       display: flex;
       justify-content: center;
@@ -173,90 +208,40 @@
       display: none;
       animation: gradientShift 3s ease infinite;
     }
+    
+    /* Button Effects */
+    #showModelBtn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(138, 99, 210, 0.6); }
+    #openBtn:hover { background-color: #b794f4; transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,0.25); }
 
-    #showModelBtn::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
-      transform: translate(-50%, -50%);
-      transition: width 0.6s, height 0.6s;
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
-    #showModelBtn:hover::before {
-      width: 300px;
-      height: 300px;
-    }
-
-    #showModelBtn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(138, 99, 210, 0.6);
-    }
-
-    #showModelBtn:active {
-      transform: translateY(-1px);
-      box-shadow: 0 3px 10px rgba(138, 99, 210, 0.5);
-    }
-
-    #showModelBtn::after {
-      content: '🌸';
-      position: absolute;
-      top: 50%;
-      left: -30px;
-      transform: translateY(-50%);
-      font-size: 20px;
+    /* --- SHARED OVERLAY STYLES --- */
+    .overlay-base {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      backdrop-filter: blur(8px);
+      visibility: hidden;
       opacity: 0;
-      transition: all 0.4s ease;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
     }
 
-    #showModelBtn:hover::after {
-      left: 10px;
+    .overlay-base.active {
+      visibility: visible;
       opacity: 1;
     }
 
-    @keyframes gradientShift {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-
-    @keyframes float {
-      0%, 100% {
-        transform: translateY(0px);
-      }
-      50% {
-        transform: translateY(-5px);
-      }
-    }
-
-    
-
-    
-
-    
-
-    
-    #openBtn:hover {
-      background-color: #b794f4;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 14px rgba(0,0,0,0.25);
-    }
-
-    #openBtn:active {
-      transform: translateY(1px);
-    }
-
-    .close-model {
+    .close-btn-style {
       position: absolute;
       top: 20px;
       right: 20px;
@@ -273,33 +258,15 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      user-select: none;
+      transition: background-color 0.3s ease;
       z-index: 10001;
     }
+    .close-btn-style:hover { background-color: #d7c3f5; }
 
-    .close-model:hover {
-      background-color: #d7c3f5;
-      color: #4b3c68;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-
+    /* --- FLOWER OVERLAY SPECIFIC --- */
     .flowers-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
       background: rgba(50, 30, 80, 0.6);
-      display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      backdrop-filter: blur(8px);
-      visibility: hidden;
-      opacity: 0;
-      transition: opacity 0.3s ease;
     }
 
     .overlay-text {
@@ -307,97 +274,86 @@
       font-size: 18px;
       text-align: center;
       max-width: 700px;
-      user-select: none;
       margin: 20px 0;
-      font-family: 'Playfair Display', 'Georgia', serif;
-    }
-
-    .flowers-overlay.active {
-      visibility: visible;
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    body.blur-active > *:not(.flowers-overlay) {
-      pointer-events: none;
-      user-select: none;
-      filter: blur(6px);
+      font-family: 'Playfair Display', serif;
     }
 
     .model-container {
-      position: relative;
       width: 80vw;
-      height: 80vh;
+      height: 60vh;
       max-width: 900px;
-      max-height: 600px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: relative;
+    }
+    
+    model-viewer { width: 100%; height: 100%; }
+
+    /* --- LETTER OVERLAY SPECIFIC (New) --- */
+    .letter-overlay {
+      background: rgba(28, 20, 45, 0.7);
     }
 
-    .flowers-overlay model-viewer {
-      width: 100%;
-      height: 100%;
-      background-color: transparent;
+    .big-letter-paper {
+      width: 90%;
+      max-width: 600px;
+      min-height: 70vh;
+      max-height: 90vh;
+      background-color: #fffcf5; /* Cream paper color */
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+      position: relative;
+      overflow-y: auto;
+      transform: scale(0.8);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      
+      /* Lined Paper Effect (Optional, remove lines below if unwanted) */
+      background-image: repeating-linear-gradient(#fffcf5 0px, #fffcf5 24px, #e1dce8 25px);
     }
 
-    /* Arrow Navigation Buttons */
+    .letter-overlay.active .big-letter-paper {
+      transform: scale(1);
+    }
+
+    .big-letter-content {
+      font-family: 'Dancing Script', cursive;
+      font-size: 24px;
+      color: #2a2138;
+      line-height: 1.8; /* Matches line height to background lines approx */
+    }
+
+    .big-letter-header {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      color: #6a4c9c;
+      margin-bottom: 20px;
+      text-align: center;
+      border-bottom: 2px solid #d8b9f2;
+      padding-bottom: 10px;
+    }
+
+    /* --- Navigation Buttons & Counter --- */
     .arrow-btn {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background-color: rgba(255, 255, 255, 0.9);
-      color: #5b4a7a;
+      background: rgba(255,255,255,0.9);
       border: none;
-      width: 50px;
-      height: 50px;
+      width: 50px; height: 50px;
       border-radius: 50%;
-      font-size: 24px;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      transition: all 0.3s ease;
-      z-index: 10002;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-    }
-
-    .arrow-btn:hover {
-      background-color: #d7c3f5;
-      transform: translateY(-50%) scale(1.1);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
-    }
-
-    .arrow-btn:active {
-      transform: translateY(-50%) scale(0.95);
-    }
-
-    .arrow-left {
-      left: 20px;
-    }
-
-    .arrow-right {
-      right: 20px;
-    }
-
-    /* Flower Counter */
-    .flower-counter {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: rgba(255, 255, 255, 0.9);
+      font-size: 24px;
       color: #5b4a7a;
-      padding: 8px 20px;
-      border-radius: 20px;
-      font-family: 'Dancing Script', cursive;
-      font-size: 16px;
-      font-weight: 600;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-      z-index: 10002;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .arrow-left { left: -60px; }
+    .arrow-right { right: -60px; }
+
+    .flower-counter {
+        position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%);
+        color: white; font-family: 'Poppins';
     }
 
+    /* --- Countdown --- */
     .countdown {
       position: fixed;
       top: 20px;
@@ -408,55 +364,60 @@
       color: #5a3fa4;
       font-family: 'Dancing Script', cursive;
       font-size: 22px;
-      letter-spacing: 1px;
       padding: 12px 20px;
       border-radius: 18px;
       box-shadow: 0 0 10px rgba(138, 99, 210, 0.4);
-      text-align: center;
       animation: glow 2s ease-in-out infinite alternate;
-      z-index: 9999;
+      z-index: 9998;
     }
 
-    @keyframes glow {
-      from { box-shadow: 0 0 8px rgba(138, 99, 210, 0.3); }
-      to { box-shadow: 0 0 20px rgba(138, 99, 210, 0.7); }
-    }
+    @keyframes glow { from { box-shadow: 0 0 8px rgba(138, 99, 210, 0.3); } to { box-shadow: 0 0 20px rgba(138, 99, 210, 0.7); } }
   </style>
 </head>
 <body>
 
   <div class="countdown" id="countdown">Loading timer...</div>
 
-  <div class="flowers-overlay" id="overlay">
+  <div class="overlay-base flowers-overlay" id="overlay">
     <div class="model-container">
       <button class="arrow-btn arrow-left" id="prevBtn">‹</button>
-      
-      <model-viewer
-        id="flowerModel"
-        src="flowers.glb"
-        alt="3D model of flowers"
-        auto-rotate
-        camera-controls
-        loading="lazy"
-      ></model-viewer>
-      
+      <model-viewer id="flowerModel" src="flowers.glb" alt="3D flowers" auto-rotate camera-controls loading="lazy"></model-viewer>
       <button class="arrow-btn arrow-right" id="nextBtn">›</button>
-      
       <div class="flower-counter" id="counter">1 / 1</div>
     </div>
-    
     <p class="overlay-text">"First come the flowers that glow upon your screen, next will be the ones that light up your nights."</p>
-    <button class="close-model" id="closeModel">X</button>
+    <button class="close-btn-style" id="closeModel">X</button>
+  </div>
+
+  <div class="overlay-base letter-overlay" id="letterOverlay">
+    <div class="big-letter-paper">
+      <button class="close-btn-style" id="closeLetter" style="top: 10px; right: 10px; width: 30px; height: 30px; font-size: 16px;">X</button>
+      
+      <h2 class="big-letter-header">Dear Wissam,</h2>
+      <div class="big-letter-content">
+        <p>
+          You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha. 
+          You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha.
+          You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha.
+          <br><br>
+          You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha.
+          You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha.
+          You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha.
+          You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha.
+        </p>
+      </div>
+    </div>
   </div>
 
   <div class="wrapper">
     <div class="lid one"></div>
     <div class="lid two"></div>
     <div class="envelope"></div>
-    <div class="letter">
+    
+    <div class="letter" id="smallLetter">
       <h3 class="letter-title">Dear Wissam,</h3>  
       <p class="letter-content">
-        You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha.You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha. You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha.You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha. You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha.You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha. You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha.
+        You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha.You're too smart mn9drsh nkheli letter hna tsema rani mkhebiha f plasa whdoukhra haha...
       </p>
     </div>
   </div>
@@ -469,10 +430,18 @@
   <script>
     const btn = document.getElementById('openBtn');
     const wrapper = document.querySelector('.wrapper');
-    const letter = document.querySelector('.letter');
+    const smallLetter = document.getElementById('smallLetter');
     const showBtn = document.getElementById('showModelBtn');
-    const overlay = document.getElementById('overlay');
-    const closeBtn = document.getElementById('closeModel');
+    
+    // Overlays
+    const flowerOverlay = document.getElementById('overlay');
+    const letterOverlay = document.getElementById('letterOverlay');
+    
+    // Close buttons
+    const closeModelBtn = document.getElementById('closeModel');
+    const closeLetterBtn = document.getElementById('closeLetter');
+    
+    // Flower Navigation
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const flowerModel = document.getElementById('flowerModel');
@@ -480,8 +449,6 @@
     
     let isOpen = false;
 
-    // Array of your 3D flower model files
-    // REPLACE THESE WITH YOUR ACTUAL FILE NAMES
     const flowerModels = [
       'flowers.glb',
       'generic_tulip_flower.glb',
@@ -489,51 +456,73 @@
       'bouquet_of_flowers.glb',
       'bouquet_roses_blanches.glb'
     ];
-    
     let currentFlowerIndex = 0;
 
-    // Update counter display
     function updateCounter() {
       counter.textContent = `${currentFlowerIndex + 1} / ${flowerModels.length}`;
     }
 
-    // Change flower model
     function changeFlower(index) {
       currentFlowerIndex = index;
       flowerModel.src = flowerModels[currentFlowerIndex];
       updateCounter();
     }
 
-    // Previous flower
     prevBtn.addEventListener('click', () => {
       currentFlowerIndex = (currentFlowerIndex - 1 + flowerModels.length) % flowerModels.length;
       changeFlower(currentFlowerIndex);
     });
 
-    // Next flower
     nextBtn.addEventListener('click', () => {
       currentFlowerIndex = (currentFlowerIndex + 1) % flowerModels.length;
       changeFlower(currentFlowerIndex);
     });
 
+    // --- ENVELOPE OPEN/CLOSE LOGIC ---
     btn.addEventListener('click', () => {
       wrapper.classList.toggle('open');
       isOpen = !isOpen;
       btn.textContent = isOpen ? 'Close Letter' : 'Open Letter';
-      letter.style.top = isOpen ? '-80px' : '0px';
       showBtn.style.display = isOpen ? 'block' : 'none';
+      
+      // Allow interaction with the letter only when open
+      if (isOpen) {
+        smallLetter.style.pointerEvents = "auto";
+      } else {
+        smallLetter.style.pointerEvents = "none";
+      }
     });
 
+    // --- FLOWER OVERLAY LOGIC ---
     showBtn.addEventListener('click', () => {
-      overlay.classList.add('active');
+      flowerOverlay.classList.add('active');
       updateCounter();
     });
 
-    closeBtn.addEventListener('click', () => {
-      overlay.classList.remove('active');
+    closeModelBtn.addEventListener('click', () => {
+      flowerOverlay.classList.remove('active');
     });
 
-    // Countdown Timer Script
+    // --- BIG LETTER OVERLAY LOGIC ---
+    smallLetter.addEventListener('click', () => {
+        if (isOpen) {
+            letterOverlay.classList.add('active');
+        }
+    });
+
+    closeLetterBtn.addEventListener('click', () => {
+        letterOverlay.classList.remove('active');
+    });
+
+    // Optional: Close letter if clicking outside the paper
+    letterOverlay.addEventListener('click', (e) => {
+        if (e.target === letterOverlay) {
+            letterOverlay.classList.remove('active');
+        }
+    });
+
+
+    // --- COUNTDOWN LOGIC ---
     const countdownEl = document.getElementById('countdown');
     const endDate = new Date("June 30, 2026 23:59:59").getTime();
 
@@ -551,9 +540,7 @@
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      countdownEl.innerHTML = `
-        ⏳ <b>${days}</b>d : <b>${hours}</b>h : <b>${minutes}</b>m : <b>${seconds}</b>s
-      `;
+      countdownEl.innerHTML = `⏳ <b>${days}</b>d : <b>${hours}</b>h : <b>${minutes}</b>m : <b>${seconds}</b>s`;
     }
 
     setInterval(updateCountdown, 1000);
