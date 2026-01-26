@@ -371,10 +371,7 @@
     }
     .close-btn-style:hover { background-color: #d7c3f5; }
 
-    .flowers-overlay {
-      background: rgba(50, 30, 80, 0.6);
-      flex-direction: column;
-    }
+
 
     .overlay-text {
       color: #f4f0fa;
@@ -391,6 +388,7 @@
       height: 60vh;
       max-width: 900px;
       position: relative;
+      margin-top: 110px;
     }
 
     model-viewer { width: 100%; height: 100%; }
@@ -737,4 +735,144 @@
   .close-btn-style {
     transform: scale(0.85);
   }
+}
+
+/* Update your overlay CSS */
+/* Day/Night Toggle Button Style */
+#dayNightBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px); /* Frosted glass effect */
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 100;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover effect: grows slightly and glows */
+#dayNightBtn:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+}
+
+/* Style change when in Night Mode */
+.flowers-overlay.night-mode #dayNightBtn {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(138, 43, 226, 0.4);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.flowers-overlay.night-mode #dayNightBtn:hover {
+  box-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
+}
+/* Base Overlay (Transition settings) */
+.flowers-overlay {
+    transition: background 1.5s ease;
+    background: radial-gradient(circle at center, #ffe9d7, #8fd2ff); /* Day */
+    overflow: hidden; /* Prevents stars from creating scrollbars */
+    flex-direction: column;
+}
+
+/* Night Mode Class */
+.flowers-overlay.night-mode {
+    background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%); /* Night */
+}
+
+.star-particle {
+    position: fixed; /* Sit on top of the background */
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    pointer-events: none; /* Let clicks pass through to the model */
+    z-index: 1; /* Behind the model-viewer but above background */
+    animation: twinkle 2s infinite ease-in-out;
+}
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.5); }
+}
+
+#flowerModel {
+    transition: filter 1s ease;
+    z-index: 5; /* Ensure model is above stars */
+}
+.flowers-overlay:not(.night-mode) #flowerModel {
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.7));
+}
+
+.flowers-overlay:not(.night-mode) #moonModel {
+  transform: translateY(0);
+  opacity: 0;
+}
+
+.flowers-overlay:not(.night-mode) #sunModel {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+
+.flowers-overlay.night-mode #moonModel {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.flowers-overlay.night-mode #sunModel {
+  transform: translateY(0);
+  opacity: 0;
+}
+
+
+/* Fix text color for Day/Night */
+.flowers-overlay .overlay-text {
+  color: #5b4a7a; /* Dark text for Day */
+  transition: color 1.5s ease;
+  text-shadow: 0 2px 10px rgba(255,255,255,0.5);
+}
+
+.flowers-overlay.night-mode .overlay-text {
+  color: #e0d4ff; /* Light glowing text for Night */
+  text-shadow: 0 0 15px rgba(160, 100, 255, 0.8);
+}
+
+#sunModel,
+#moonModel {
+  width: 130px;
+  height: 130px;
+  transition: transform 1.2s ease, opacity 1.2s ease;
+}
+.sun-moon-container model-viewer {
+  display: block;
+}
+
+#sunModel {
+  margin-top: -140px;
+
+  filter: drop-shadow(0 0 12px rgba(255, 222, 152, 0.9))
+          drop-shadow(0 0 30px rgba(255, 180, 50, 0.6));
+}
+.sun-moon-container {
+  position: fixed;
+  top: 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  z-index: 5;
+  pointer-events: none;
 }

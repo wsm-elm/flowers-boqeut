@@ -229,3 +229,73 @@
 
     setInterval(updateCountdown, 1000);
     updateCountdown()
+
+let isNight = false;
+
+// 1. Select the new Sun and Moon models
+const sunModel = document.getElementById('sunModel');
+const moonModel = document.getElementById('moonModel');
+
+// Connect the button
+if (dayNightBtn) {
+    setDayMode(); // Set default state
+
+    dayNightBtn.addEventListener('click', () => {
+        isNight = !isNight;
+        if (isNight) {
+            setNightMode();
+        } else {
+            setDayMode();
+        }
+    });
+}
+
+function setNightMode() {
+    // --- Flower Model Lighting ---
+    flowerModel.setAttribute('environment-image', 'neutral');
+    flowerModel.setAttribute('exposure', '0.5'); // Slightly brighter than 0.4 to see detail
+    flowerModel.setAttribute('environment-intensity', '2.5'); // High shine for moonlight
+    
+    // --- Celestial Swap ---
+    // We let CSS handle the movement, but we control model exposure here
+    if (sunModel) sunModel.setAttribute('exposure', '0'); 
+    if (moonModel) moonModel.setAttribute('exposure', '1.2');
+
+    // --- Visual Effects ---
+    flowerOverlay.classList.add('night-mode');
+    dayNightBtn.textContent = '☀️';
+    
+    // --- Star Creation ---
+    removeStars(); 
+    for (let i = 0; i < 80; i++) {
+        const star = document.createElement('div');
+        star.className = 'star-particle';
+        star.style.left = Math.random() * 100 + 'vw';
+        star.style.top = Math.random() * 100 + 'vh';
+        star.style.animationDelay = Math.random() * 2 + 's';
+        flowerOverlay.appendChild(star);
+    }
+}
+
+function setDayMode() {
+    // --- Flower Model Lighting ---
+    flowerModel.setAttribute('environment-image', 'neutral');
+    flowerModel.setAttribute('exposure', '1.2');
+    flowerModel.setAttribute('environment-intensity', '1.0');
+
+    // --- Celestial Swap ---
+    if (sunModel) sunModel.setAttribute('exposure', '1.5'); // Bright sun
+    if (moonModel) moonModel.setAttribute('exposure', '0');
+
+    // --- Visual Effects ---
+    flowerOverlay.classList.remove('night-mode');
+    dayNightBtn.textContent = '🌙';
+    
+    // --- Clean up ---
+    removeStars();
+}
+
+function removeStars() {
+    const stars = document.querySelectorAll('.star-particle');
+    stars.forEach(s => s.remove());
+}

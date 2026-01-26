@@ -23,9 +23,25 @@
   <div class="countdown" id="countdown">Loading timer...</div>
 
   <div class="overlay-base flowers-overlay" id="overlay">
+    <div class="sun-moon-container">
+
+      <model-viewer id="moonModel" src="moon.glb" autoplay auto-rotate interaction-prompt="none" disable-zoom></model-viewer>
+      <model-viewer id="sunModel" src="sun.glb" autoplay auto-rotate interaction-prompt="none" disable-zoom></model-viewer>
+    </div>
     <div class="model-container">
+      <button class="day-night-btn" id="dayNightBtn">🌙</button>
       <button class="arrow-btn arrow-left" id="prevBtn">‹</button>
-      <model-viewer id="flowerModel" src="flowers.glb" alt="3D flowers" auto-rotate camera-controls loading="lazy"></model-viewer>
+      <model-viewer 
+        id="flowerModel" 
+        src="flowers.glb" 
+        alt="3D flowers" 
+        auto-rotate 
+        camera-controls 
+        loading="lazy"
+        shadow-intensity="1"
+        exposure="1.2"
+        shadow-softness="0.5"
+        environment-image="day.hdr"> </model-viewer>
       <button class="arrow-btn arrow-right" id="nextBtn">›</button>
       <div class="flower-counter" id="counter">1 / 1</div>
     </div>
