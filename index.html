@@ -9,9 +9,9 @@
   <title>Letter</title>
 </head>
 <body>
-
    <!-- Color Picker -->
   <div class="color-picker-container">
+    <button id="Surprise">🎁</button>
     <div class="color-wheel-toggle" id="colorToggle">🎨</div>
     <div class="color-wheel-panel" id="colorPanel">
       <div class="color-wheel-header">Choose Your Color</div>
@@ -19,8 +19,31 @@
       <button class="reset-btn" id="resetBtn">Reset to Default</button>
     </div>
   </div>
-
   <div class="countdown" id="countdown">Loading timer...</div>
+
+  <div class="overlay-base surprise-overlay" id="surpriseOverlay">
+    <button class="close-btn-style" id="closeSurprise">X</button>
+    <canvas id="canvas"></canvas>
+      <div id="merrywrap" class="merrywrap">
+            <div class="giftbox">
+                <div class="cover">
+                    <div></div>
+                </div>
+                
+                <div class="box"></div>
+            </div>
+        <model-viewer 
+        id="giftModel" 
+        src="dou_dou.glb" 
+        alt="3D Toy"
+        loading="lazy"
+        auto-rotate 
+        camera-controls 
+        shadow-intensity="1"
+        exposure="1.2"
+        shadow-softness="0.5"> </model-viewer>
+        </div>
+    </div>
 
   <div class="overlay-base flowers-overlay" id="overlay">
     <div class="sun-moon-container">
