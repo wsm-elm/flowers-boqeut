@@ -11,14 +11,43 @@
 <body>
    <!-- Color Picker -->
   <div class="color-picker-container">
-    <button id="Surprise">🎁</button>
-    <div class="color-wheel-toggle" id="colorToggle">🎨</div>
-    <div class="color-wheel-panel" id="colorPanel">
-      <div class="color-wheel-header">Choose Your Color</div>
-      <div class="color-options" id="colorOptions"></div>
-      <button class="reset-btn" id="resetBtn">Reset to Default</button>
-    </div>
+  <div class="color-wheel-toggle" id="colorToggle">🎨</div>
+  <button id="Surprise">🎁</button>
+  <button id="showModelBtn">💐</button>
+  <button class="day-night-btn" id="dayNightBtn">☀️</button>
+  <button class="color-wheel-toggle" id="Garden">🌷</button>
+  
+  <div class="color-wheel-panel" id="colorPanel">
+    <div class="color-wheel-header">Choose Your Color</div>
+    <div class="color-options" id="colorOptions"></div>
+    <button class="reset-btn" id="resetBtn">Reset to Default</button>
   </div>
+
+  <div class="garden-panel" id="gardenPanel">
+    <div class="garden-header">Wissem's Collection</div>
+    <div class="flower-options">
+      <div class="flower-option tulip">
+        <span>Tulips</span>
+      </div>
+      <div class="flower-option lily">
+        <span>Lilies</span>
+      </div>
+      <div class="flower-option rose">
+        <span>Roses</span>
+      </div>
+      <div class="flower-option bouquet">
+        <span>Bouquets</span>
+      </div>
+      <div class="flower-option echinopsis">
+        <span>Echinopsis</span>
+      </div>
+      <div class="flower-option chrysanthemum">
+        <span>Special</span>
+      </div>
+    </div>
+
+  </div>
+</div>
   <div class="countdown" id="countdown">Loading timer...</div>
 
   <div class="overlay-base surprise-overlay" id="surpriseOverlay">
@@ -52,7 +81,6 @@
       <model-viewer id="sunModel" src="sun.glb" autoplay auto-rotate interaction-prompt="none" disable-zoom></model-viewer>
     </div>
     <div class="model-container">
-      <button class="day-night-btn" id="dayNightBtn">🌙</button>
       <button class="arrow-btn arrow-left" id="prevBtn">‹</button>
       <model-viewer 
         id="flowerModel" 
@@ -68,7 +96,6 @@
       <button class="arrow-btn arrow-right" id="nextBtn">›</button>
       <div class="flower-counter" id="counter">1 / 1</div>
     </div>
-    <p class="overlay-text">"First come the flowers that glow upon your screen, next will be the ones that light up your nights."</p>
     <button class="close-btn-style" id="closeModel">X</button>
   </div>
 
@@ -108,7 +135,6 @@
   </div>
 
   <div class="button-container">
-    <button id="showModelBtn">3ABZI HNA!</button>
     <button id="openBtn">Open</button>
   </div>
 

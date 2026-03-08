@@ -71,7 +71,8 @@
     const btn = document.getElementById('openBtn');
     const smallLetter = document.getElementById('smallLetter');
     const showBtn = document.getElementById('showModelBtn');
-
+    const dayNight = document.getElementById('dayNightBtn');
+    const garden = document.getElementById('Garden');
     // Overlays
     const flowerOverlay = document.getElementById('overlay');
     const letterOverlay = document.getElementById('letterOverlay');
@@ -94,7 +95,29 @@
       'bouquet_of_flowers.glb',
       'bouquet_roses_blanches.glb',
     ];
+    
+    const flowerCategories = {
+      tulip: ['tulips.glb', 'generic_tulip_flower.glb'],
+      lily: ["bunga_sabun_lily.glb", 'lilies.glb'],
+      rose: ['bouquet_of_flowers.glb', 'bouquet_roses_blanches.glb'], // Assuming flowers.glb is your rose model
+      bouquet: ['flowers_in_vase.glb', 'flowers.glb'],
+      echinopsis: ['flowerscopy.glb'],
+      chrysanthemum: ['flower_bouquet.glb'], // Placeholder, replace with actual chrysanthemum models
+      all: [
+      "bunga_sabun_lily.glb",
+      'flower_bouquet.glb',
+      'flowerscopy.glb',
+      'tulips.glb',
+      'flowers_in_vase.glb',
+      'flowers.glb',
+      'generic_tulip_flower.glb',
+      'lilies.glb',
+      'bouquet_of_flowers.glb',
+      'bouquet_roses_blanches.glb',
+    ]
+};
 
+  let currentFlowerModels = flowerCategories.all;
     // Create color options
     purpleShades.forEach((shade, index) => {
       const option = document.createElement('div');
@@ -152,42 +175,54 @@
 
     // Flower navigation
     function updateCounter() {
-      counter.textContent = `${currentFlowerIndex + 1} / ${flowerModels.length}`;
+    if(counter) {
+      counter.textContent = `${currentFlowerIndex + 1} / ${currentFlowerModels.length}`;
     }
+  }
 
     function changeFlower(index) {
-      currentFlowerIndex = index;
-      flowerModel.src = flowerModels[currentFlowerIndex];
-      updateCounter();
-    }
+  currentFlowerIndex = index;
+  if(flowerModel) {
+      flowerModel.src = currentFlowerModels[currentFlowerIndex];
+  }
+  updateCounter();
+}
 
+if(prevBtn) {
     prevBtn.addEventListener('click', () => {
-      currentFlowerIndex = (currentFlowerIndex - 1 + flowerModels.length) % flowerModels.length;
+      currentFlowerIndex = (currentFlowerIndex - 1 + currentFlowerModels.length) % currentFlowerModels.length;
       changeFlower(currentFlowerIndex);
     });
+}
 
+if(nextBtn) {
     nextBtn.addEventListener('click', () => {
-      currentFlowerIndex = (currentFlowerIndex + 1) % flowerModels.length;
+      currentFlowerIndex = (currentFlowerIndex + 1) % currentFlowerModels.length;
       changeFlower(currentFlowerIndex);
     });
+}
 
     // Envelope open/close
     btn.addEventListener('click', () => {
       wrapper.classList.toggle('open');
       isOpen = !isOpen;
       btn.textContent = isOpen ? 'Close Letter' : 'Open Letter';
-      showBtn.style.display = isOpen ? 'block' : 'none';
       smallLetter.style.pointerEvents = isOpen ? "auto" : "none";
+      
     });
 
     // Flower overlay
     showBtn.addEventListener('click', () => {
       flowerOverlay.classList.add('active');
       updateCounter();
+      dayNight.style.display = 'block';
+      garden.style.display = 'block';
     });
 
     closeModelBtn.addEventListener('click', () => {
       flowerOverlay.classList.remove('active');
+      dayNight.style.display = 'none';
+      garden.style.display = 'none';
     });
 
     // Letter overlay
@@ -239,7 +274,7 @@ const moonModel = document.getElementById('moonModel');
 
 // Connect the button
 if (dayNightBtn) {
-    setDayMode(); // Set default state
+    setNightMode(); // Set default state
 
     dayNightBtn.addEventListener('click', () => {
         isNight = !isNight;
@@ -265,6 +300,7 @@ function setNightMode() {
     // --- Visual Effects ---
     flowerOverlay.classList.add('night-mode');
     dayNightBtn.textContent = '☀️';
+
     
     // --- Star Creation ---
     removeStars(); 
@@ -643,5 +679,58 @@ function reveal() {
   document.querySelector('#video').appendChild(ifrm);
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  const gardenBtn = document.getElementById('Garden');
+  const gardenPanel = document.getElementById('gardenPanel');
+  const resetGardenBtn = document.getElementById('resetGardenBtn');
+  const flowerOptions = document.querySelectorAll('.flower-option');
 
+  // Toggle the panel
+  if(gardenBtn) {
+      gardenBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); 
+        gardenPanel.classList.toggle('active');
+        
+        const colorPanel = document.getElementById('colorPanel');
+        if (colorPanel && colorPanel.classList.contains('active')) {
+          colorPanel.classList.remove('active');
+        }
+      });
+  }
 
+  // Handle category selection
+  flowerOptions.forEach(option => {
+    option.addEventListener('click', () => {
+      // Manage active states visually
+      flowerOptions.forEach(opt => opt.classList.remove('active'));
+      option.classList.add('active');
+      
+      // Get the category name ('tulip', 'lily', 'rose', 'bouquet')
+      const selectedCategory = option.classList[1]; 
+      
+      // Filter the models and update the 3D viewer instantly
+      if (flowerCategories[selectedCategory]) {
+        currentFlowerModels = flowerCategories[selectedCategory];
+        currentFlowerIndex = 0; // Reset to the first model in this new list
+        changeFlower(0); 
+      }
+    });
+  });
+
+  // Handle "Show All Flowers" button
+  if(resetGardenBtn) {
+      resetGardenBtn.addEventListener('click', () => {
+        flowerOptions.forEach(opt => opt.classList.remove('active'));
+        currentFlowerModels = flowerCategories.all;
+        currentFlowerIndex = 0;
+        changeFlower(0);
+      });
+  }
+
+  // Close panel when clicking outside
+  document.addEventListener('click', (e) => {
+    if (gardenPanel && !gardenPanel.contains(e.target) && e.target !== gardenBtn) {
+      gardenPanel.classList.remove('active');
+    }
+  });
+});
