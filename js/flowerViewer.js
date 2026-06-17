@@ -134,7 +134,8 @@ document.addEventListener('click', (e) => {
 });
 
 // --- AR "Live View" ---
-// model-viewer auto-wires the slot="ar-button" click to launch AR with the
+// The button is pinned to the bottom of the overlay (not slotted into the
+// viewer), so clicking it launches AR manually with activateAR(). AR uses the
 // model's current src, so whatever flower is on screen is the one shown in AR.
 // It's only usable on AR-capable devices (Android over HTTPS), so reveal the
 // button only when the viewer reports it can actually start a session.
@@ -144,5 +145,10 @@ if (arButton && flowerModel) {
     arButton.style.display = flowerModel.canActivateAR ? 'flex' : 'none';
   };
   flowerModel.addEventListener('load', refreshArButton);
+  flowerModel.addEventListener('ar-status', refreshArButton);
+  // canActivateAR can resolve a moment after load, so re-check shortly after.
   refreshArButton();
+  setTimeout(refreshArButton, 1200);
+
+  arButton.addEventListener('click', () => flowerModel.activateAR());
 }

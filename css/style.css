@@ -544,6 +544,7 @@
       font-size: 24px;
       color: #5b4a7a;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      z-index: 5;   /* stay above the model-viewer */
     }
     .arrow-left { left: -60px; }
     .arrow-right { right: -60px; }
@@ -1719,6 +1720,11 @@
    ========================================================= */
 #flowerModel { position: relative; }
 
+/* Hide model-viewer's built-in AR button — we use our own. */
+#flowerModel::part(default-ar-button) { display: none; }
+
+/* Our Live View button is pinned to the very bottom of the overlay,
+   clear of the model and the "1 / N" counter. */
 .ar-button {
   display: none;            /* JS switches to flex when AR is available */
   position: absolute;
@@ -1731,13 +1737,13 @@
   color: #fff;
   border: none;
   border-radius: 30px;
-  padding: 11px 24px;
+  padding: 12px 26px;
   font-size: 15px;
   font-weight: 700;
   font-family: 'Comic Neue', sans-serif;
   cursor: pointer;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-  z-index: 6;
+  z-index: 10002;
 }
 .ar-button:active { transform: translateX(-50%) scale(0.94); }
 
@@ -1774,6 +1780,12 @@
   }
   /* Open the panels below the button grid so they don't cover it */
   .color-wheel-panel, .garden-panel { top: calc(100% + 10px); }
+
+  /* The arrows sit outside the wide mobile model box, so pull them
+     in to the model's edges and shrink them a touch. */
+  .arrow-btn { width: 44px; height: 44px; font-size: 22px; }
+  .arrow-left { left: 6px; }
+  .arrow-right { right: 6px; }
 
   /* Catch-the-petals game overlay */
   .game-title { font-size: 32px; }
