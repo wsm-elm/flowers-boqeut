@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Comic+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="css/style.css">
   <title>Letter</title>
 </head>
 <body>
@@ -14,6 +14,7 @@
   <div class="color-wheel-toggle" id="colorToggle">🎨</div>
   <button id="Surprise">🎁</button>
   <button id="showModelBtn">💐</button>
+  <button id="showDuckBtn">🐤</button>
   <button class="day-night-btn" id="dayNightBtn">☀️</button>
   <button class="color-wheel-toggle" id="Garden">🌷</button>
   
@@ -62,8 +63,8 @@
                 <div class="box"></div>
             </div>
         <model-viewer 
-        id="giftModel" 
-        src="dou_dou.glb" 
+        id="giftModel"
+        src="assets/models/dou_dou.glb"
         alt="3D Toy"
         loading="lazy"
         auto-rotate 
@@ -77,14 +78,14 @@
   <div class="overlay-base flowers-overlay" id="overlay">
     <div class="sun-moon-container">
 
-      <model-viewer id="moonModel" src="moon.glb" autoplay auto-rotate interaction-prompt="none" disable-zoom></model-viewer>
-      <model-viewer id="sunModel" src="sun.glb" autoplay auto-rotate interaction-prompt="none" disable-zoom></model-viewer>
+      <model-viewer id="moonModel" src="assets/models/moon.glb" autoplay auto-rotate interaction-prompt="none" disable-zoom></model-viewer>
+      <model-viewer id="sunModel" src="assets/models/sun.glb" autoplay auto-rotate interaction-prompt="none" disable-zoom></model-viewer>
     </div>
     <div class="model-container">
       <button class="arrow-btn arrow-left" id="prevBtn">‹</button>
       <model-viewer 
-        id="flowerModel" 
-        src="flowers.glb" 
+        id="flowerModel"
+        src="assets/models/flowers.glb"
         alt="3D flowers" 
         auto-rotate 
         camera-controls 
@@ -92,7 +93,7 @@
         shadow-intensity="1"
         exposure="1.2"
         shadow-softness="0.5"
-        environment-image="day.hdr"> </model-viewer>
+        environment-image="assets/env/day.hdr"> </model-viewer>
       <button class="arrow-btn arrow-right" id="nextBtn">›</button>
       <div class="flower-counter" id="counter">1 / 1</div>
     </div>
@@ -139,6 +140,6 @@
   </div>
 
 
-  <script src="script.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
