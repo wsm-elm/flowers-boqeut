@@ -9,19 +9,27 @@
   <title>Letter</title>
 </head>
 <body>
+  <!-- Loading screen -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-flower">🌸</div>
+    <div class="loading-text">Loading something special…</div>
+    <div class="loading-bar"><span></span></div>
+  </div>
+
    <!-- Color Picker -->
   <div class="color-picker-container">
-  <div class="color-wheel-toggle" id="colorToggle">🎨</div>
-  <button id="Surprise">🎁</button>
-  <button id="showModelBtn">💐</button>
-  <button id="showDuckBtn">🐤</button>
-  <button class="day-night-btn" id="dayNightBtn">☀️</button>
-  <button class="color-wheel-toggle" id="Garden">🌷</button>
+  <div class="color-wheel-toggle" id="colorToggle" data-tip="Change the envelope colors">🎨</div>
+  <button id="Surprise" data-tip="Open a surprise gift">🎁</button>
+  <button id="showModelBtn" data-tip="View the 3D flower bouquets">💐</button>
+  <button id="showDuckBtn" data-tip="Meet the duck in 3D">🐤</button>
+  <button id="catchGameBtn" data-tip="Play: catch the petals">🎯</button>
+  <button class="day-night-btn" id="dayNightBtn" data-tip="Switch day / night">☀️</button>
+  <button class="color-wheel-toggle" id="Garden" data-tip="Browse the flower collection">🌷</button>
   
   <div class="color-wheel-panel" id="colorPanel">
     <div class="color-wheel-header">Choose Your Color</div>
     <div class="color-options" id="colorOptions"></div>
-    <button class="reset-btn" id="resetBtn">Reset to Default</button>
+    <button class="reset-btn tip-top" id="resetBtn" data-tip="Reset colors to default">Reset to Default</button>
   </div>
 
   <div class="garden-panel" id="gardenPanel">
@@ -50,6 +58,21 @@
   </div>
 </div>
   <div class="countdown" id="countdown">Loading timer...</div>
+
+  <!-- Catch the Petals mini-game -->
+  <div class="overlay-base game-overlay" id="gameOverlay">
+    <button class="close-btn-style" id="closeGame">X</button>
+    <div class="game-field" id="gameField"></div>
+    <div class="game-ui" id="gameUi">
+      <div class="game-title">Catch the Petals 🌸</div>
+      <div class="game-stats">
+        <span>⏱️ <b id="gameTime">30</b>s</span>
+        <span>🌸 <b id="gameScore">0</b></span>
+      </div>
+      <button class="game-start-btn tip-top" id="startGame" data-tip="Start the game">Start</button>
+      <div class="game-result" id="gameResult"></div>
+    </div>
+  </div>
 
   <div class="overlay-base surprise-overlay" id="surpriseOverlay">
     <button class="close-btn-style" id="closeSurprise">X</button>
@@ -136,7 +159,7 @@
   </div>
 
   <div class="button-container">
-    <button id="openBtn">Open</button>
+    <button id="openBtn" class="tip-top" data-tip="Open or close the envelope">Open</button>
   </div>
 
 

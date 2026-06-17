@@ -1406,4 +1406,364 @@
   transition: transform 0.2s ease-in-out;
 }
 
+/* =========================================================
+   Loading screen — shown until the page is ready
+   ========================================================= */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  background: linear-gradient(135deg, #efe4f9 0%, #f7e9f3 50%, #e7e0fb 100%);
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.loading-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loading-flower {
+  font-size: 64px;
+  animation: loadingBloom 1.6s ease-in-out infinite;
+  filter: drop-shadow(0 6px 14px rgba(138, 99, 210, 0.35));
+}
+
+@keyframes loadingBloom {
+  0%, 100% { transform: scale(0.85) rotate(-8deg); }
+  50%      { transform: scale(1.1) rotate(8deg); }
+}
+
+.loading-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: 28px;
+  color: #7a5fa6;
+}
+
+.loading-bar {
+  width: 180px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(138, 99, 210, 0.18);
+  overflow: hidden;
+}
+
+.loading-bar span {
+  display: block;
+  width: 40%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #a784e8, #c98ef0);
+  animation: loadingSlide 1.2s ease-in-out infinite;
+}
+
+@keyframes loadingSlide {
+  0%   { transform: translateX(-120%); }
+  100% { transform: translateX(320%); }
+}
+
+/* =========================================================
+   Design refresh — frosted glass, soft shadows, entrance
+   animations, and button micro-interactions
+   ========================================================= */
+
+/* Frosted-glass panels */
+.color-wheel-panel,
+.garden-panel {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 14px 44px rgba(80, 50, 120, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+/* Round buttons — soft layered shadow + springy press animation */
+.color-wheel-toggle,
+#Surprise,
+#showModelBtn,
+#showDuckBtn,
+.day-night-btn {
+  box-shadow:
+    0 6px 18px rgba(120, 80, 160, 0.28),
+    0 2px 4px rgba(0, 0, 0, 0.12);
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+}
+
+.color-wheel-toggle:active,
+#Surprise:active,
+#showModelBtn:active,
+#showDuckBtn:active,
+.day-night-btn:active,
+#openBtn:active {
+  transform: scale(0.92);
+}
+
+/* Entrance animations */
+@keyframes fadeSlideDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.color-picker-container { animation: fadeSlideDown 0.7s ease both; }
+.countdown { animation: fadeSlideDown 0.7s ease 0.1s both, glow 2s ease-in-out 0.8s infinite alternate; }
+.wrapper { animation: fadeIn 0.9s ease 0.2s both; }
+.button-container { animation: fadeSlideUp 0.7s ease 0.35s both; }
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .color-picker-container,
+  .countdown,
+  .wrapper,
+  .button-container,
+  .loading-flower,
+  .loading-bar span {
+    animation: none;
+  }
+}
+
+/* =========================================================
+   Catch the Petals mini-game
+   ========================================================= */
+
+/* Round game button, matching the other top-left buttons */
+#catchGameBtn {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffd6e8 0%, #ffb6c1 100%);
+  border: 3px solid white;
+  box-shadow: 0 6px 18px rgba(120, 80, 160, 0.28), 0 2px 4px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+}
+#catchGameBtn:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(120, 80, 160, 0.45); }
+#catchGameBtn:active { transform: scale(0.92); }
+
+/* Falling-petal animation used by the game pieces */
+@keyframes atmoFall {
+  0%   { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
+  8%   { opacity: 1; }
+  100% { transform: translateY(112vh) translateX(var(--drift, 0px)) rotate(var(--spin, 360deg)); opacity: 1; }
+}
+.game-overlay {
+  background: rgba(40, 20, 60, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  flex-direction: column;
+}
+
+.game-field { position: absolute; inset: 0; z-index: 1; overflow: hidden; }
+
+.game-ui {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: #fff;
+  pointer-events: none;
+}
+.game-start-btn { pointer-events: auto; }
+
+.game-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 44px;
+  margin-bottom: 10px;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+}
+
+.game-stats {
+  display: flex;
+  gap: 26px;
+  justify-content: center;
+  font-size: 22px;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 18px;
+}
+
+.game-start-btn {
+  padding: 12px 34px;
+  border: none;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(135deg, #c98ef0, #8a63d2);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.game-start-btn:hover { transform: translateY(-2px); }
+.game-start-btn:active { transform: scale(0.93); }
+
+.game-result {
+  margin-top: 18px;
+  max-width: 360px;
+  font-family: 'Playfair Display', serif;
+  font-size: 19px;
+  line-height: 1.5;
+  min-height: 1.5em;
+}
+
+.game-petal {
+  position: absolute;
+  top: -8vh;
+  font-size: 34px;
+  cursor: pointer;
+  user-select: none;
+  will-change: transform;
+  animation: atmoFall linear forwards;
+}
+.game-petal.caught { animation: petalPop 0.3s ease forwards; cursor: default; }
+
+@keyframes petalPop {
+  0%   { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-petal { animation-duration: 0.001s; }
+}
+
+/* =========================================================
+   Hover tooltips — add data-tip="..." to any button.
+   Default appears to the right; use .tip-top / .tip-bottom /
+   .tip-left to reposition near screen edges.
+   ========================================================= */
+[data-tip] { position: relative; }
+
+[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(10px) scale(0.92);
+  transform-origin: left center;
+  white-space: nowrap;
+  background: rgba(40, 20, 60, 0.94);
+  color: #fff;
+  font-family: 'Comic Neue', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1;
+  padding: 7px 11px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 100001;
+}
+
+[data-tip]:hover::after,
+[data-tip]:focus-visible::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(10px) scale(1);
+}
+
+/* Below the element */
+.tip-bottom::after {
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%) translateY(10px) scale(0.92);
+  transform-origin: top center;
+}
+.tip-bottom:hover::after,
+.tip-bottom:focus-visible::after { transform: translateX(-50%) translateY(10px) scale(1); }
+
+/* Above the element */
+.tip-top::after {
+  left: 50%;
+  top: auto;
+  bottom: 100%;
+  transform: translateX(-50%) translateY(-10px) scale(0.92);
+  transform-origin: bottom center;
+}
+.tip-top:hover::after,
+.tip-top:focus-visible::after { transform: translateX(-50%) translateY(-10px) scale(1); }
+
+/* To the left of the element */
+.tip-left::after {
+  left: auto;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(-10px) scale(0.92);
+  transform-origin: right center;
+}
+.tip-left:hover::after,
+.tip-left:focus-visible::after { transform: translateY(-50%) translateX(-10px) scale(1); }
+
+/* =========================================================
+   Mobile responsiveness for the newer features
+   (the top-left buttons & their panels already scale with
+   the container; these handle the full-screen pieces.)
+   ========================================================= */
+
+/* Tooltips need a real pointer — hide them on touch devices so
+   they don't "stick" after a tap. */
+@media (hover: none), (pointer: coarse) {
+  [data-tip]::after { content: none; }
+}
+
+@media screen and (max-width: 768px) {
+  /* Lay the top-left buttons out 2-by-2 and size them like the
+     palette button, so they stay tucked in the corner instead of
+     running down a tall column over the envelope. */
+  .color-picker-container {
+    display: grid;
+    grid-template-columns: repeat(2, 50px);
+    gap: 8px;
+    align-content: start;
+    justify-content: start;
+    transform-origin: top left;
+  }
+  #colorToggle, #Surprise, #showModelBtn, #showDuckBtn,
+  #catchGameBtn, #dayNightBtn, #Garden {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    margin: 0;
+  }
+  /* Open the panels below the button grid so they don't cover it */
+  .color-wheel-panel, .garden-panel { top: calc(100% + 10px); }
+
+  /* Catch-the-petals game overlay */
+  .game-title { font-size: 32px; }
+  .game-stats { font-size: 18px; gap: 18px; }
+  .game-start-btn { padding: 11px 30px; font-size: 17px; }
+
+  /* Loading screen */
+  .loading-flower { font-size: 52px; }
+  .loading-text { font-size: 23px; }
+}
+
+@media screen and (max-width: 480px) {
+  .game-title { font-size: 26px; margin-bottom: 8px; }
+  .game-stats { font-size: 16px; gap: 14px; margin-bottom: 14px; }
+  .game-start-btn { padding: 10px 26px; font-size: 16px; }
+
+  .loading-flower { font-size: 44px; }
+  .loading-text { font-size: 20px; }
+}
+
 
