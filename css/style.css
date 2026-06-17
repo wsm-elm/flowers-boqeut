@@ -1723,12 +1723,13 @@
 /* Hide model-viewer's built-in AR button — we use our own. */
 #flowerModel::part(default-ar-button) { display: none; }
 
-/* Our Live View button is pinned to the very bottom of the overlay,
-   clear of the model and the "1 / N" counter. */
+/* Our Live View button sits over the bottom-center of the model
+   (inside .model-container, so it's always on-screen), just above
+   the "1 / N" counter. */
 .ar-button {
   display: none;            /* JS switches to flex when AR is available */
   position: absolute;
-  bottom: 18px;
+  bottom: 16px;
   left: 50%;
   transform: translateX(-50%);
   align-items: center;
@@ -1743,7 +1744,7 @@
   font-family: 'Comic Neue', sans-serif;
   cursor: pointer;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-  z-index: 10002;
+  z-index: 6;
 }
 .ar-button:active { transform: translateX(-50%) scale(0.94); }
 
