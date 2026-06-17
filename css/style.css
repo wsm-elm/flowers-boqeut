@@ -1714,6 +1714,34 @@
 .tip-left:focus-visible::after { transform: translateY(-50%) translateX(-10px) scale(1); }
 
 /* =========================================================
+   AR "Live View" button — Android only, shown only when the
+   device can actually start AR (revealed by flowerViewer.js).
+   ========================================================= */
+#flowerModel { position: relative; }
+
+.ar-button {
+  display: none;            /* JS switches to flex when AR is available */
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #c98ef0, #8a63d2);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 11px 24px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Comic Neue', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  z-index: 6;
+}
+.ar-button:active { transform: translateX(-50%) scale(0.94); }
+
+/* =========================================================
    Mobile responsiveness for the newer features
    (the top-left buttons & their panels already scale with
    the container; these handle the full-screen pieces.)

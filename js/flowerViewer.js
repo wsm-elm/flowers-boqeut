@@ -132,3 +132,17 @@ document.addEventListener('click', (e) => {
     gardenPanel.classList.remove('active');
   }
 });
+
+// --- AR "Live View" ---
+// model-viewer auto-wires the slot="ar-button" click to launch AR with the
+// model's current src, so whatever flower is on screen is the one shown in AR.
+// It's only usable on AR-capable devices (Android over HTTPS), so reveal the
+// button only when the viewer reports it can actually start a session.
+const arButton = document.getElementById('arButton');
+if (arButton && flowerModel) {
+  const refreshArButton = () => {
+    arButton.style.display = flowerModel.canActivateAR ? 'flex' : 'none';
+  };
+  flowerModel.addEventListener('load', refreshArButton);
+  refreshArButton();
+}
