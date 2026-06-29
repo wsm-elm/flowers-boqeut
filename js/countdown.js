@@ -10,7 +10,8 @@ function updateCountdown() {
   const distance = END_DATE - Date.now();
 
   if (distance <= 0) {
-    countdownEl.textContent = "🎉 Time's up! 🎉";
+    countdownEl.textContent = "💌 The letter is ready 💌";
+    document.body.classList.add('letter-unlocked');
     return;
   }
 
